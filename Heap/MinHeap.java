@@ -1,0 +1,89 @@
+public class MinHeap {
+ private int []heap;
+ private int size;
+ private int capacity;
+
+ public MinHeap(int capacity){
+  this.capacity = capacity;
+  heap = new int [capacity];
+  size = 0;
+ }
+ private int parent(int i){
+  return (i-1)/2;
+ }
+ private int left(int i){
+  return 2*i+1;
+ }
+ private int right(int i){
+  return 2*i+2;
+ }
+ //Inserting
+ public void insert (int key){
+  if(size==capacity){
+    System.out.println("Heap Overflow");
+    return;
+  }
+  heap[size] = key;
+  int i=size;
+  size++;
+  while(i!=0 && heap[parent(i)]>heap[i]){
+    swap(i,parent(i));
+    i=parent(i);
+  }
+ }
+ public int extractMin(){
+  if(size<=0)return Integer.MIN_VALUE;
+  if(size==1)return heap[--size];
+  int root =heap[0];
+  heap[0] = heap[size-1];
+  size--;
+  heapify(0);
+  return root;
+ }
+ private void heapify(int i){
+  int l = left(i);
+  int r = right(i);
+  int smallest = i;
+  if(l<size && heap[l]<heap[smallest])smallest =l;
+  if(r<size && heap[r]<heap[smallest])smallest = r;
+  if(smallest !=i){
+    swap(i,smallest);
+    heapify(smallest);
+  }
+ }
+ public void decreasekey(int i, int newval){
+  heap[i]=newval;
+  while(i!=0 && heap[parent(i)]>heap[i]){
+    swap(i,parent(i));
+    i=parent(i);
+  }
+ }
+ public void deletekey(int i){
+  decreasekey(i,Integer.MIN_VALUE);
+  extractMin();
+
+ }
+ private void swap(int i , int j){
+  int temp = heap[i];
+  heap[i] = heap [j];
+  heap[j] = temp;
+ }
+ public void printHeap(){
+  for(int i=0;i<size;i++){
+    System.out.print(heap[i]+" ");
+    System.out.println();
+  }
+ }
+ public static void main(String argc[]){
+  MinHeap h = new MinHeap(10);
+  h.insert(10);
+  h.insert(20);
+   h.insert(5);
+  h.insert(6);
+   h.insert(1);
+  h.printHeap();
+  System.out.println("Min " + h.extractMin() );
+  h.printHeap();
+ } 
+  
+}
